@@ -10,13 +10,27 @@ class Homecontroller extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    // view dashboard
 
+    public function dashboard()
     {
-        $data = User::get();
-        return view('welcome' , compact('data'));
+        return view('dashboard');
+    }
+    public function info()
+    {
+        return User::get(); // Return all users from the User model
     }
 
+
+    public function index()
+    {
+
+        // Fetch the user data from the database
+        $data = $this->info(); // Get the data from the info method
+
+        // Return the view and pass the data
+        return view('index', compact('data'));
+    }
     /**
      * Show the form for creating a new resource.
      */
