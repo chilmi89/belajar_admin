@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class Homecontroller extends Controller
 {
@@ -36,7 +41,7 @@ class Homecontroller extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -44,7 +49,26 @@ class Homecontroller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate the input
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation errors:', $validator->errors()->toArray());
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        // Create the user
+        // Redirect to the user management page
+        $data['name'] = $request->name;
+        $data['email'] = $request->email;
+        $data['password'] = Hash::make($request->password);
+
+        User::create($data);
+
+        return redirect()->route('user.index');
     }
 
     /**
