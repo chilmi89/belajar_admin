@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+
 class Homecontroller extends Controller
 {
     /**
@@ -23,7 +24,7 @@ class Homecontroller extends Controller
     }
     public function info()
     {
-        return User::get(); // Return all users from the User model
+        return User::get();
     }
 
 
@@ -39,10 +40,7 @@ class Homecontroller extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -84,7 +82,8 @@ class Homecontroller extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = User::findOrFail($id);
+        return view('edit', compact('data'));
     }
 
     /**
@@ -92,7 +91,27 @@ class Homecontroller extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Validasi input
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id, // Aturan validasi yang benar
+        ]);
+
+        // Jika validasi gagal
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Cari data user berdasarkan ID
+        $user = User::findOrFail($id);
+
+        // Update data
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->save();
+
+        // Redirect ke halaman index atau sesuai kebutuhan
+        return redirect()->route('user.index', $id)->with(['success' => 'Data Berhasil Diupdate']);
     }
 
     /**
@@ -100,6 +119,15 @@ class Homecontroller extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // Find the user by id
+        $user = User::findOrFail($id);
+
+        // Delete the user
+        if($user){
+            $user->delete();
+        }
+
+        // Redirect to the index page with a success message
+        return redirect()->route('user.index')->with(['success' => 'User deleted successfully']);
     }
 }

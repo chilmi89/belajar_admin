@@ -51,25 +51,59 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>User</th>
-                                        <th>email</th>
-                                        <th>action</th>
-                                        
+                                        <th>Email</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($data as $d)
-                                        
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $loop->index + 1 }}</td>
                                             <td>{{ $d->name }}</td>
                                             <td>{{ $d->email }}</td>
                                             <td>
-                                                <a href="" class="btn btn-primary"><i class="bi bi-search"></i> edit</a>
-                                                <a href="" class="btn btn-danger"><i class="bi bi-trash"></i> delete</a>
+                                                <a href="{{ route('user.edit', $d->id) }}" class="btn btn-primary">
+                                                    <i class="bi bi-pencil"></i> Edit
+                                                </a>
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal{{ $loop->index }}">
+                                                    <i class="bi bi-trash"></i> Delete
+                                                </button>
                                             </td>
                                         </tr>
+
+                                        <div class="modal fade" id="deleteModal{{ $loop->index }}">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Delete Data</h4>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Anda yakin ingin menghapus data <b>{{ $d->name }}</b> ?</p>
+                                                        <form action="{{ route('user.destroy', $d->id) }}" method="post">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <input type="hidden" name="name" value="{{ $d->name }}">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">
+                                                            Close
+                                                        </button>
+                                                        <button type="submit" class="btn btn-danger">
+                                                            Delete
+                                                        </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
                                     @endforeach
-                                    
                                 </tbody>
                             </table>
                         </div>
@@ -82,39 +116,7 @@
     </div>
 </main>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('user.store') }}" method="POST">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Name">
-                        @error('name')
-                            {{ $message }}
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Email">
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
+<x-modal>
+    
+</x-modal>
