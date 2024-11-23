@@ -52,7 +52,7 @@ class Homecontroller extends Controller
             'name' => 'required',
             'email' => 'required',
             'password' => 'required',
-        ]);
+        ]); 
 
         if ($validator->fails()) {
             Log::error('Validation errors:', $validator->errors()->toArray());
@@ -89,7 +89,7 @@ class Homecontroller extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id) 
     {
         // Validasi input
         $validator = Validator::make($request->all(), [

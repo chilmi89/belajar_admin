@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Homecontroller;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Homecontroller;
+use App\Http\Controllers\LoginController;
 
 
 Route::get('/', [Homecontroller::class, 'dashboard']);
@@ -16,4 +17,8 @@ Route::put('/update/{id}', [Homecontroller::class, 'update']) -> name('user.upda
 
 Route::delete('/delete/{id}', [Homecontroller::class, 'destroy'])->name('user.destroy');
 
+
+
+Route::get('/login',[LoginController::class, 'index']);
+Route::post('/login', [LoginController::class, 'proses'])->name('login.proses');
 
