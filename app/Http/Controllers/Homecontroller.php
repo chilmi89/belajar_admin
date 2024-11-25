@@ -40,7 +40,18 @@ class Homecontroller extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create() {
+
+    
+    }
+    public function edit_data($id = null)
+    {
+        if (!$id) {
+            return redirect()->route('user.index')->with('error', 'ID tidak ditemukan!');
+        }
+        $user = User::find($id);
+        return view('user.edit', compact('user'));
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -52,7 +63,7 @@ class Homecontroller extends Controller
             'name' => 'required',
             'email' => 'required',
             'password' => 'required',
-        ]); 
+        ]);
 
         if ($validator->fails()) {
             Log::error('Validation errors:', $validator->errors()->toArray());
@@ -89,7 +100,7 @@ class Homecontroller extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id) 
+    public function update(Request $request, string $id)
     {
         // Validasi input
         $validator = Validator::make($request->all(), [
@@ -123,7 +134,7 @@ class Homecontroller extends Controller
         $user = User::findOrFail($id);
 
         // Delete the user
-        if($user){
+        if ($user) {
             $user->delete();
         }
 

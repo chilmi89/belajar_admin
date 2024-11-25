@@ -30,14 +30,22 @@ class LoginController extends Controller
         if (Auth::attempt($request->only('email', 'password'))) {
             // Redirect jika login berhasil
             return redirect()->route('user.index')->with('success', 'Login berhasil.');
-        }else{
-            return redirect()->route('login')-> back()->withErrors([
-                'email' => 'Email atau password salah.',
-            ])->withInput($request->except('password'));
+        }else {
+            // Redirect jika login gagal, dengan pesan error
+            return redirect()
+                ->route('login')
+                ->with('error', 'Email atau password salah.');
         }
 
 
         // Kembalikan ke halaman login dengan pesan error
 
     }
+    public function logout()
+    {
+        Auth::logout();
+
+        return redirect()->route('login.proses');
+    }
+
 }

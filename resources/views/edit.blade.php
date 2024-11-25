@@ -1,5 +1,7 @@
 <x-layout>
-
+    @section('sidebar')
+        @include('components.side-bar', ['data' => $data])
+    @endsection
     @section('content')
         <main class="app-main">
             <div class="app-content-header">
