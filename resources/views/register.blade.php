@@ -1,0 +1,1 @@
+@include('komponen_register.register')

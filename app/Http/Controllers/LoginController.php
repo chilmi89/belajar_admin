@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 
 class LoginController extends Controller
@@ -48,4 +50,31 @@ class LoginController extends Controller
         return redirect()->route('login.proses');
     }
 
+    public function register()
+    {
+        return view('register'); // Pastikan Anda memiliki file `resources/views/register.blade.php`
+    }
+
+    public function prosesRegister(Request $request)
+    {
+        // Validasi input
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email|max:255',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        // Buat user baru
+        User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+        ]);
+
+        // Redirect ke halaman login dengan pesan sukses
+        return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login.');
+    }
 }
+
+
+

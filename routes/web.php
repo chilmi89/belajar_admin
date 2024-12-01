@@ -8,9 +8,13 @@ Route::get('/login',[LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'proses'])->name('login.proses');
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/register', [LoginController::class, 'register'])->name('register');
+Route::post('/register', [LoginController::class, 'prosesRegister'])->name('register.proses');
 
 
 
+// Route::prefix('admin')->group(function () {
+// });
 
 Route::get('/', [Homecontroller::class, 'dashboard']);
 Route::get('/user', [Homecontroller::class, 'index'])->name('user.index');
@@ -23,5 +27,6 @@ Route::put('/update/{id}', [Homecontroller::class, 'update']) -> name('user.upda
 
 
 Route::delete('/delete/{id}', [Homecontroller::class, 'destroy'])->name('user.destroy');
+
 
 
